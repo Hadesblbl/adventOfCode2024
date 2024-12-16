@@ -51,10 +51,9 @@ def swap(l, i, j):
 def swapGrid(grid, x1, y1, x2, y2):
     grid[y1][x1], grid[y2][x2] = grid[y2][x2], grid[y1][x1]
 
-# FIXME not the best
-
 
 def representsInt(s):
+    # FIXME not the best
     try:
         int(s)
         return True
@@ -96,12 +95,12 @@ def getGrid(x, y):
 
 
 def isAllDifferent(tab):
-    seen = []
+    seen = set({})
     for i in tab:
         if i in seen:
             return False
         else:
-            seen.append(i)
+            seen.add(i)
     return True
 
 
