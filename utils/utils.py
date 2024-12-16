@@ -29,6 +29,10 @@ def readGridOfChars(fileName):
     return list(map(list, readFileLines(fileName)))
 
 
+def readGridOfInts(fileName):
+    return [list(map(int, line)) for line in readGridOfChars(fileName)]
+
+
 def readLinesSeparatedByEmptyLines(fileName):
     lines = readFileLines(fileName)
     result = []

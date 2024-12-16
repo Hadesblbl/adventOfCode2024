@@ -33,7 +33,7 @@ import puzzle_25.solve as solve25
 # solve6.solve()
 # solve7.solve()
 # solve8.solve()
-solve9.solve()
+# solve9.solve()
 solve10.solve()
 solve11.solve()
 solve12.solve()
