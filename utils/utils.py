@@ -22,6 +22,9 @@ def readFileLines(fileName):
         lines = [line.rstrip("\n") for line in file.readlines()]
     return lines
 
+def readGridOfChars(fileName):
+    return list(map(list,readFileLines(fileName)))
+
 def readLinesSeparatedByEmptyLines(fileName):
     lines = readFileLines(fileName)
     result=[]
