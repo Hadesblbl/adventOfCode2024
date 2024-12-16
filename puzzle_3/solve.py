@@ -3,6 +3,7 @@ import re
 
 fileName = "puzzle_3/input.txt"
 
+
 def solve():
     print("Solving puzzle 3 of Advent of Code 2024")
     file = utils.readFile(fileName)
@@ -12,9 +13,9 @@ def solve():
         digits = list(map(int, mult[4:-1].split(",")))
         somme += digits[0] * digits[1]
     print(somme)
-    
+
     instructions = re.findall("mul\(\d+,\d+\)|do\(\)|don't\(\)", file)
-    
+
     somme = 0
     do = True
     for instruction in instructions:
