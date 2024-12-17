@@ -10,46 +10,34 @@ def solve():
     maxY = len(mountain)
 
     toVisit = startingPoints(mountain)
-    summitPerStart = {}
-    nbTrails = 0
+    summitPerStart = {startPos: set({}) for x, y, value, startPos in toVisit}
 
+    nbTrails = 0
     while len(toVisit) > 0:
         x, y, value, startPos = toVisit.popleft()
         if value == 9:
             nbTrails += 1
-            if startPos in summitPerStart:
-                summitPerStart[startPos].add(getPos(x, y))
-            else:
-                summitPerStart[startPos] = {getPos(x, y)}
+            summitPerStart[startPos].add(utils.getPos(x, y))
             continue
-        for move in utils.moves:
-            movex, movey = utils.moves[move]
-            newX, newY = x+movex, y+movey
-            if outOfBounds(newX, newY, maxX, maxY):
+        for newX, newY in utils.getAdjacent(x, y):
+            if utils.outOfBounds(newX, newY, maxX, maxY):
                 continue
             if mountain[newY][newX] == value+1:
                 toVisit.append([newX, newY, value+1, startPos])
-    nb9 = 0
-    for start in summitPerStart:
-        nb9 += len(summitPerStart[start])
-    print(nb9)
+
+    # Part 1
+    print(sum([len(summitPerStart[start]) for start in summitPerStart]))
+    # Part 2
     print(nbTrails)
 
 
 def startingPoints(mountain):
+    '''Returns a queue of all the starting points, to visit them later'''
     starts = deque()
     maxX = len(mountain[0])
     maxY = len(mountain)
     for y in range(maxY):
         for x in range(maxX):
             if mountain[y][x] == 0:
-                starts.append([x, y, 0, getPos(x, y)])
+                starts.append([x, y, 0, utils.getPos(x, y)])
     return starts
-
-
-def outOfBounds(x, y, maxX, maxY):
-    return x < 0 or y < 0 or x >= maxX or y >= maxY
-
-
-def getPos(x, y):
-    return str(x)+":"+str(y)

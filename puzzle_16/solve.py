@@ -20,12 +20,12 @@ def solve():
 
     while (len(toVisit) != 0):
         cost, x, y, direction, path = heapq.heappop(toVisit)
-        posVisiting = getPos(x, y)
+        posVisiting = utils.getPos(x, y)
         visited[posVisiting] = [cost, direction]
         # stop condition
         if (maze[y][x] == "E"):
             minEnd = cost
-            spotToSit.add(getPos(x, y))
+            spotToSit.add(utils.getPos(x, y))
             for pos in path:
                 spotToSit.add(pos)
         # check every direction
@@ -34,26 +34,27 @@ def solve():
             newx, newy = x+movex, y+movey
             if maze[newy][newx] == "#":
                 continue
-            posToVisit = getPos(newx, newy)
+            posToVisit = utils.getPos(newx, newy)
             costToVisit = cost+1
             if (directionEnum.value != direction):
                 costToVisit += 1000
+            # Take into account the fact that there can be an avoided turn next step for the same position
             if posToVisit not in visited or (visited[posToVisit][0] >= costToVisit-1000 and costToVisit <= minEnd):
                 newPath = path[:]
                 newPath.append(posVisiting)
                 heapq.heappush(
                     toVisit, [costToVisit, newx, newy, directionEnum.value, newPath])
+    # Part 1
     print(minEnd)
 
-    for spot in spotToSit:
-        x, y = list(map(int, spot.split(":")))
-        maze[y][x] = "O"
+    # Part 2
     print(len(spotToSit))
 
-# POS = cost, x, y, direction, path so that cost is taken as the heap value
+#
 
 
 def getPosStart(maze, start):
+    '''Pos = cost, x, y, direction, path so that cost is taken as the heap value'''
     for i in range(len(maze)):
         for j in range(len(maze[0])):
             if maze[i][j] == start:
@@ -65,12 +66,8 @@ def getPosEnd(maze, end):
     for i in range(len(maze)):
         for j in range(len(maze[0])):
             if maze[i][j] == end:
-                return getPos(j, i)
-    return getPos(-1, -1)
-
-
-def getPos(x, y):
-    return str(x)+":"+str(y)
+                return utils.getPos(j, i)
+    return utils.getPos(-1, -1)
 
 
 class Direction(Enum):

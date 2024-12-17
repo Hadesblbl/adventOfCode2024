@@ -172,7 +172,7 @@ def getListRepresentedBy(listString):
     return json.loads(listString)
 
 
-def getPos(grid, searched):
+def findItem(grid, searched):
     for i in range(len(grid)):
         for j in range(len(grid[0])):
             if (grid[i][j] == searched):
@@ -211,3 +211,22 @@ def getAdjacent(x, y):
 
 def getStringAfter(string, pattern):
     return string[string.find(pattern)+len(pattern):]
+
+
+def concat(a, b):
+    return a * pow(10, len(str((b)))) + b
+
+
+def outOfBounds(x, y, maxX, maxY):
+    '''Checks if x and y are out of bounds'''
+    return x < 0 or y < 0 or x >= maxX or y >= maxY
+
+
+def getPos(x, y):
+    '''Gets hashable string from position'''
+    return str(x)+":"+str(y)
+
+
+def getXY(pos):
+    '''Gets two int from position string'''
+    return list(map(int, pos.split(":")))

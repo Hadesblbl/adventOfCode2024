@@ -33,7 +33,7 @@ def getPosAntinodes(positions, maxX, maxY):
     antinodes = set({})
     for c in positions:
         nbPositions = len(positions[c])
-        # tous les couples même fréquence
+        # all couples with same frequency
         for i in range(nbPositions):
             for j in range(i+1, nbPositions):
                 x1, y1 = positions[c][i]
@@ -54,7 +54,7 @@ def getPosAntinodes2(positions, maxX, maxY):
     antinodes = set({})
     for c in positions:
         nbPositions = len(positions[c])
-        # tous les couples même fréquence
+        # all couples with same frequency
         for i in range(nbPositions):
             for j in range(i+1, nbPositions):
                 x1, y1 = positions[c][i]
@@ -81,14 +81,3 @@ def isValid(x, y, maxX, maxY):
 
 def getPos(x, y):
     return str(x)+":"+str(y)
-
-
-def getXY(pos):
-    return list(map(int, pos.split(":")))
-
-
-def fillLinesWithPositions(lines, positions):
-    for position in positions:
-        x, y = getXY(position)
-        lines[y][x] = "#"
-    return lines

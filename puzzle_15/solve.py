@@ -10,7 +10,7 @@ def solve():
     print("Solving puzzle 15 of Advent of Code 2024")
     maze, moves = utils.readLinesSeparatedByEmptyLines(fileName)
     maze = list(map(list, maze))  # to list of list of chars
-    x, y = utils.getPos(maze, "@")
+    x, y = utils.findItem(maze, "@")
     for move in list("".join(moves)):  # to list of chars
         x, y = moveMaze(maze, x, y, move)
     somme = 0
@@ -24,7 +24,7 @@ def solve():
     maze, moves = utils.readLinesSeparatedByEmptyLines(fileName)
     maze = scaleUp(maze)
     maze = list(map(list, maze))  # to list of list of chars
-    x, y = utils.getPos(maze, "@")
+    x, y = utils.findItem(maze, "@")
     for move in list("".join(moves)):  # to list of chars
         x, y = moveScaledupMaze(maze, x, y, move)
 
@@ -39,10 +39,12 @@ def solve():
 
 
 def gpsCoordinates(x, y):
+    '''Returns coordinates score'''
     return y*100+x
 
 
 def moveMaze(maze, x, y, move):
+    '''Move once in a direction in a normal maze'''
     nextEmptySpot = getEmptySpotIndex(maze, x, y, move)
     if (nextEmptySpot == -1):
         return [x, y]
@@ -56,16 +58,15 @@ def moveMaze(maze, x, y, move):
 
 
 def moveScaledupMaze(maze, x, y, move):
+    '''Move once in a direction in a scaled up maze'''
     movex, movey = moves[move]
-    # if horizontal move, no special logic, just push normally - OK TESTED
+    # Horizontal move, push the boxes by 1
     if (movey == 0):
         nextEmptySpot = getEmptySpotIndex(maze, x, y, move)
         if (nextEmptySpot == -1):
             return [x, y]
         maze[y][x] = "."
         maze[y][x+movex] = "@"
-        # if 1 box, nextEmpty = 3, needs to change x+movex*2 and x+movex*3 into []
-        # if going left, start with ], if going right, start with [
         box = "["
         if movex < 0:
             box = "]"
@@ -76,7 +77,7 @@ def moveScaledupMaze(maze, x, y, move):
                 box = "]"
             else:
                 box = "["
-    # if empty, just go - OK TESTED
+    # if empty, just go
     elif maze[y+movey][x] == ".":
         maze[y][x] = "."
         maze[y+movey][x] = "@"
@@ -91,6 +92,7 @@ def moveScaledupMaze(maze, x, y, move):
 
 
 def getEmptySpotIndex(maze, x, y, move):
+    '''Returns the distance to the next empty spot in the direction of the move'''
     movex, movey = moves[move]
     nextCase = ""
     nbPush = 1
@@ -103,6 +105,7 @@ def getEmptySpotIndex(maze, x, y, move):
 
 
 def scaleUp(maze):
+    '''Returns a scaled up maze'''
     for y in range(len(maze)):
         row = maze[y]
         row = row.replace(".", "..")
@@ -114,6 +117,7 @@ def scaleUp(maze):
 
 
 def canPush(maze, x, y, movey):
+    '''Checks if a vertical push is possible in a scaled up maze'''
     x1, x2 = x, x+1
     if maze[y+movey][x] == "]":
         x1, x2 = x-1, x
@@ -130,11 +134,9 @@ def canPush(maze, x, y, movey):
         canPushBool = False
     return canPushBool
 
-# needs to chck with canPush before using
-# pushes from y towards movey, checking movey*2 for collision
-
 
 def push(maze, x, y, movey):
+    '''Push vertically in a scaled up maze. Needs to check with canPush before using'''
     if (maze[y+movey][x] == "."):
         return
     x1, x2 = x, x+1
@@ -157,9 +159,3 @@ def push(maze, x, y, movey):
     # in every situation, finish by pushing actual box
     utils.swapGrid(maze, x1, y+movey, x1, y+movey*2)
     utils.swapGrid(maze, x2, y+movey, x2, y+movey*2)
-
-
-def printMap(listOfList):
-    for l in listOfList:
-        print("".join(l).replace(".", " ").replace("@", utils.OKGREEN+"@"+utils.ENDC).replace("#",
-              utils.FAIL+"#"+utils.ENDC).replace("[]", utils.WARNING+"[]"+utils.ENDC))

@@ -6,61 +6,59 @@ fileName = "puzzle_7/input.txt"
 def solve():
     print("Solving puzzle 7 of Advent of Code 2024")
     lines = utils.readFileLines(fileName)
+    lines = [line.split(": ") for line in lines]
+    lines = [(int(value), list(map(int, numbers.split(" "))))
+             for value, numbers in lines]
 
-    somme = 0
-    for line in lines:
-        value, numbers = line.split(": ")
-        if canBeTrue(int(value), list(map(int, numbers.split(" ")))):
-            somme += int(value)
-    print(somme)
+    # Part 1
+    print(sum([value for value, numbers in lines if canBeTrue(value, numbers)]))
 
-    # checkWithConcatToBigNumbers(lines)
+    # Part 2
+    # part2(lines)
     print(204976636995111)
 
 
-def checkWithConcatToBigNumbers(lines):
-    somme = 0
-    for line in lines:
-        value, numbers = line.split(": ")
-        if canBeTrueWithConcat(int(value), list(map(int, numbers.split(" ")))):
-            somme += int(value)
-    print(somme)
-
-# can be optimized by exiting once found
+def part2(lines):
+    print(sum([value for value, numbers in lines if canBeTrue(
+        value, numbers) or canBeTrueWithConcat(value, numbers)]))
 
 
 def canBeTrue(value, numbers):
-    return value in allPossibleValues(numbers)
+    '''Check if value is present in possible outcomes from the numbers'''
+    return value in allPossibleValues(numbers, value)
 
-# with left to right operations
 
-
-def allPossibleValues(numbers):
-    if (len(numbers) == 1):
-        return {numbers[-1]}
-    possibleValues = allPossibleValues(numbers[:-1])
-    newPossibleValues = set({})
-    for possibleValue in possibleValues:
-        newPossibleValues.add(possibleValue*numbers[-1])
-        newPossibleValues.add(possibleValue+numbers[-1])
+def allPossibleValues(numbers, value):
+    '''Find all possible values from the list of numbers, excluding those superior to target value 
+    (the chosen operands are only increasing the value)'''
+    possibleValues = {numbers[0]}
+    for i in range(1, len(numbers)):
+        newPossibleValues = set({})
+        for possibleValue in possibleValues:
+            if possibleValue > value:
+                continue
+            newPossibleValues.add(possibleValue*numbers[i])
+            newPossibleValues.add(possibleValue+numbers[i])
+        possibleValues = newPossibleValues
     return newPossibleValues
-
-# can be optimized by exiting once found
 
 
 def canBeTrueWithConcat(value, numbers):
-    return value in allPossibleValuesWithConcat(numbers)
+    '''Check if value is present in possible outcomes from the numbers, with concat operand too'''
+    return value in allPossibleValuesWithConcat(numbers, value)
 
-# concat is all left vs all right
 
-
-def allPossibleValuesWithConcat(numbers):
-    if (len(numbers) == 1):
-        return {numbers[-1]}
-    possibleValues = allPossibleValuesWithConcat(numbers[:-1])
-    newPossibleValues = set({})
-    for possibleValue in possibleValues:
-        newPossibleValues.add(possibleValue*numbers[-1])
-        newPossibleValues.add(possibleValue+numbers[-1])
-        newPossibleValues.add(int(str(possibleValue)+str(numbers[-1])))
+def allPossibleValuesWithConcat(numbers, value):
+    '''Find all possible values from the list of numbers, excluding those superior to target value 
+    (the chosen operands are only increasing the value)'''
+    possibleValues = {numbers[0]}
+    for i in range(1, len(numbers)):
+        newPossibleValues = set({})
+        for possibleValue in possibleValues:
+            if possibleValue > value:
+                continue
+            newPossibleValues.add(possibleValue*numbers[i])
+            newPossibleValues.add(possibleValue+numbers[i])
+            newPossibleValues.add(utils.concat(possibleValue, numbers[i]))
+        possibleValues = newPossibleValues
     return newPossibleValues

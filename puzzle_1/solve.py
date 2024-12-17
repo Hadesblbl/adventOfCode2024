@@ -6,42 +6,30 @@ fileName = "puzzle_1/input.txt"
 def solve():
     print("Solving puzzle 1 of Advent of Code 2024")
     lines = utils.readFileLines(fileName)
+    lines = [list(map(int, line.split("   "))) for line in lines]
+    # Part 1
     print(distance(lines))
+    # Part 2
     print(similarity(lines))
 
 
 def distance(lines):
+    '''Creates and orders the two columns of int, then returns the sum of their disances ordered'''
     l1 = []
     l2 = []
-    for line in lines:
-        if (len(line) < 3):
-            continue
-        a, b = line.split("  ")
-        l1.append(int(a))
-        l2.append(int(b))
+    for x1, x2 in lines:
+        l1.append(int(x1))
+        l2.append(int(x2))
     l1.sort()
     l2.sort()
-    somme = 0
-    for i in range(len(l1)):
-        somme += abs(l1[i]-l2[i])
-    return somme
+    return sum([abs(x1-x2) for x1, x2 in zip(l1, l2)])
 
 
 def similarity(lines):
-    l1 = []
-    l2 = {}
-    for line in lines:
-        if (len(line) < 3):
-            continue
-        a, b = map(int, line.split("  "))
-        l1.append(a)
-        if (not a in l2):
-            l2[a] = 0
-        if (b in l2):
-            l2[b] = l2[b]+1
-        else:
-            l2[b] = 1
-    simil = 0
-    for l in l1:
-        simil += l*l2[l]
-    return simil
+    '''Counts the occurences of each of the numbers in the second column, then calculate the similarity with the first column'''
+    list1 = [a for a, b in lines]
+    occurences = {a: 0 for a, b in lines}
+    for a, b in lines:
+        if b in occurences:
+            occurences[b] += 1
+    return sum([number*occurences[number] for number in list1])

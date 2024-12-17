@@ -16,23 +16,18 @@ def solve():
     for i in range(nbBlink):
         stones = blink(stones)
 
-    somme = 0
-    for stone in stones:
-        somme += stones[stone]
-    print(somme)
+    print(sum([stones[stone] for stone in stones]))
     # blink 50 times more for 75
     nbBlink = 50
 
     for i in range(nbBlink):
         stones = blink(stones)
 
-    somme = 0
-    for stone in stones:
-        somme += stones[stone]
-    print(somme)
+    print(sum([stones[stone] for stone in stones]))
 
 
 def blink(stones):
+    '''Apply the change to all stones, and get the new number of stones for each type of stones'''
     newStoneNb = {}
     for stone in stones:
         result = change(stone)
@@ -45,6 +40,7 @@ def blink(stones):
 
 
 def toDict(stones):
+    '''Gets the count of each type of stone'''
     dictStone = {}
     for stone in stones:
         if stone in dictStone:
@@ -56,6 +52,7 @@ def toDict(stones):
 
 @functools.cache
 def change(stone):
+    '''Apply the change to a stone'''
     if (stone == 0):
         return [1]
     stoneStr = str(stone)

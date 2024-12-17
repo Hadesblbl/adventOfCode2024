@@ -6,7 +6,6 @@ fileName = "puzzle_9/input.txt"
 def solve():
     print("Solving puzzle 9 of Advent of Code 2024")
     numStr = utils.readFile(fileName)
-    # numStr= "2333133121414131402"
     numList = list(map(int, list(numStr)))
     fileLayout = getFileLayout(numList)
     rearrange(fileLayout)
@@ -20,13 +19,12 @@ def solve():
 
 
 def getFileLayout(digitList):
+    '''Gets the array representation of the file layout'''
     result = []
     isFile = True
     numFile = 0
     for digit in digitList:
         if isFile:
-            if (digit == 0):
-                print("empty file block")
             result += [numFile]*digit
             numFile += 1
         else:
@@ -36,18 +34,13 @@ def getFileLayout(digitList):
 
 
 def checksum(numStr):
-    index = 0
-    somme = 0
-    while (index < len(numStr)):
-        if (numStr[index] == "."):
-            index += 1
-            continue
-        somme += int(numStr[index])*index
-        index += 1
-    return somme
+    '''Calculates the checksum of a file system'''
+    return sum([int(numStr[i])*i for i in range(len(numStr)) if numStr[i] != "."])
 
 
 def rearrange(numStr):
+    '''Rearranges character by character from the last to the first.
+    Every time an empty character is found to the left of a file, swaps them'''
     indexEmpty = 0
     indexBlock = len(numStr)-1
 
@@ -61,29 +54,28 @@ def rearrange(numStr):
 
 
 def rearrangeSmarter(numStr, numList):
+    '''Rearranges block by block from the last to the first. 
+    For that purpose, keeps track of the list of empty block and how much of each of them is filled. 
+    File blocks are never empty so empty blocks never need to be concatenated.
+    For each file, search an empty spot large enough then swaps it with it when found'''
     fill = [0 for i in range(len(numList))]
     indexBlock = len(numStr)-1
     fileId = numStr[indexBlock]
     while (fileId > 0):
-        print(fileId)
-        # get file and size
-        fileId = numStr[indexBlock]
-        sizeBlock = numList[int(fileId)*2]
-        # search sequence of . of sizeBlock and swap when found
+        sizeBlock = numList[fileId*2]
         indexEmpty = 0
         for i in range(len(numList)):
             if indexEmpty > indexBlock:
                 break
-            # need to account for empty file block?
+            # if empty block with enough space, swaps its empty space with file
+            # then stop searching empty area for that file
             if i % 2 == 1 and numList[i] - fill[i] >= sizeBlock:
-                # start after fill
                 indexEmpty += fill[i]
-                # swap block if possible
                 for j in range(sizeBlock):
                     utils.swap(numStr, indexBlock-j, indexEmpty+j)
                 fill[i] += sizeBlock
                 break
             indexEmpty += numList[i]
-        # go to next file block
-        if fileId > 0:
-            indexBlock -= sizeBlock+numList[int(fileId)*2-1]
+        # skip to next file block
+        indexBlock -= sizeBlock+numList[fileId*2-1]
+        fileId -= 1
