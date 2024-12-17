@@ -203,3 +203,7 @@ def getCenteredMap(grid, x, y, size):
 
 def copy(grid):
     return [[grid[j][i] for i in range(len(grid))] for j in range(len(grid[0]))]
+
+
+def getAdjacent(x, y):
+    return [[x+1, y], [x-1, y], [x, y-1], [x, y+1]]
