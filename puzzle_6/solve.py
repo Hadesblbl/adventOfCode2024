@@ -1,5 +1,4 @@
 import utils.utils as utils
-import time
 
 fileName = "puzzle_6/input.txt"
 
