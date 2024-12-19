@@ -12,7 +12,7 @@ def solve():
 
     print(len(getPathToEnd(grid)))
 
-    print(getByteBlockingExit(grid,posToFill))
+    print(getByteBlockingExit(grid, posToFill))
 
 
 def getGrid(x, y):
@@ -26,6 +26,7 @@ def prepareGrid(posToFill, nbCorruptedBytes):
         x, y = posToFill[i]
         grid[y][x] = "#"
     return grid
+
 
 def getPathToEnd(grid):
     x, y = 0, 0
@@ -48,15 +49,15 @@ def getPathToEnd(grid):
     return []
 
 
-def getByteBlockingExit(grid,posToFill):
-    posInPath = {utils.getPos(x,y) for x,y in getPathToEnd(grid)}
-    for i in range(1024,len(posToFill)):
-        x,y = posToFill[i]
+def getByteBlockingExit(grid, posToFill):
+    posInPath = {utils.getPos(x, y) for x, y in getPathToEnd(grid)}
+    for i in range(1024, len(posToFill)):
+        x, y = posToFill[i]
         grid[y][x] = "#"
-        if utils.getPos(x,y) not in posInPath:
+        if utils.getPos(x, y) not in posInPath:
             continue
         else:
-            posInPath = {utils.getPos(x,y) for x,y in getPathToEnd(grid)}
+            posInPath = {utils.getPos(x, y) for x, y in getPathToEnd(grid)}
             if len(posInPath) == 0:
                 return str(x)+","+str(y)
     return "0,0"
