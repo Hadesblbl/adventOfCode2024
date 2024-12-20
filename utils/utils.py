@@ -223,10 +223,10 @@ def outOfBounds(x, y, maxX, maxY):
 
 
 def getPos(x, y):
-    '''Gets hashable string from position'''
-    return str(x)+":"+str(y)
+    '''Gets hashable object from position'''
+    return tuple([x, y])
 
 
 def getXY(pos):
-    '''Gets two int from position string'''
-    return list(map(int, pos.split(":")))
+    '''Gets two int from position object'''
+    return pos
