@@ -230,3 +230,14 @@ def getPos(x, y):
 def getXY(pos):
     '''Gets two int from position object'''
     return pos
+
+
+def addDicts(d1, d2):
+    '''Returns a dict corresponding to the two dictionary values added together'''
+    result = {k: v for k, v in d1.items()}
+    for d in d2:
+        if d in result:
+            result[d] += d2[d]
+        else:
+            result[d] = d2[d]
+    return result
