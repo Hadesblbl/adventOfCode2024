@@ -1,5 +1,4 @@
 import utils.utils as utils
-from typing import Tuple
 
 fileName = "puzzle_25/input.txt"
 
@@ -20,7 +19,7 @@ def fit(lock: list[int], key: list[int]) -> bool:
     return all([s1+s2 <= 5 for s1, s2 in zip(lock, key)])
 
 
-def getLockAndKeys(locksAndKeys: list[list[str]]) -> Tuple[list[list[int]], list[list[int]]]:
+def getLockAndKeys(locksAndKeys: list[list[str]]) -> tuple[list[list[int]], list[list[int]]]:
     locks = [toSizes(item) for item in locksAndKeys if isLock(item)]
     keys = [toSizes(item) for item in locksAndKeys if not isLock(item)]
     return locks, keys
