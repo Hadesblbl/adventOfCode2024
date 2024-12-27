@@ -14,7 +14,6 @@ def solve() -> None:
     print(getZ(wireValues, gateConnections))
 
 
-
 # ======================
 # Everything useful to get Z value from a setup is under there
 
